@@ -1,0 +1,20 @@
+# Ignorar carpetas de bases de datos locales (si decides usar volúmenes locales luego)
+postgres-data/
+db-data/
+pgadmin-data/
+
+# Ignorar variables de entorno (por si luego creas un archivo .env para contraseñas)
+.env
+*.env
+
+# Ignorar archivos temporales del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Ignorar configuraciones de editores de código a nivel raíz
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
