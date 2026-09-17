@@ -30,4 +30,9 @@ public class TaskController {
             return taskRepository.save(task);
         }).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
     }
+
+    @PostMapping
+    public Task createTask(@RequestBody Task task) {
+        return taskRepository.save(task);
+    }
 }
