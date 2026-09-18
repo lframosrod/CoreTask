@@ -18,4 +18,12 @@ export class ApiService {
   createTask(task: any) {
     return this.http.post('/api/tasks', task);
   }
+
+  updateTask(id: number, task: any) {
+    return this.http.put(`/api/tasks/${id}`, task);
+  }
+
+  deleteTask(id: number) {
+    return this.http.delete(`/api/tasks/${id}`);
+  }
 }

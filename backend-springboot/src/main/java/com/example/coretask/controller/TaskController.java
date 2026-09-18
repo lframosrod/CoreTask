@@ -35,4 +35,18 @@ public class TaskController {
     public Task createTask(@RequestBody Task task) {
         return taskRepository.save(task);
     }
+
+    @PutMapping("/{id}")
+    public Task updateTask(@PathVariable Long id, @RequestBody Task taskDetails) {
+        return taskRepository.findById(id).map(task -> {
+            // Actualizamos únicamente el estado de completado
+            task.setCompleted(taskDetails.isCompleted());
+            return taskRepository.save(task);
+        }).orElseThrow(() -> new RuntimeException("Tarea no encontrada"));
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteTask(@PathVariable Long id) {
+        taskRepository.deleteById(id);
+    }
 }
