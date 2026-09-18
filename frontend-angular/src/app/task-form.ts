@@ -30,6 +30,7 @@ export class TaskFormComponent {
       description: this.newTask.description,
       completed: false,
       priority: this.newTask.priority,
+      status: 'PENDIENTE', // Inicializacion de estado
       user: { id: this.currentUserId }
     };
 

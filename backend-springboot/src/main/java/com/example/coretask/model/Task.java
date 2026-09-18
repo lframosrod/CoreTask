@@ -20,7 +20,9 @@ public class Task {
     private String title;
     private String description;
     private boolean completed;
+
     private Integer priority;
+    private String status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -65,6 +67,18 @@ public class Task {
 
     public void setPriority(Integer priority) {
         this.priority = priority;
+    }
+
+    public String getStatus() {
+        // Si la tarea tiene un estado, lo devuelve. Si es una tarea vieja, calcula su
+        // estado basado en "completed"
+        if (status != null)
+            return status;
+        return this.completed ? "COMPLETADA" : "PENDIENTE";
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public User getUser() {
