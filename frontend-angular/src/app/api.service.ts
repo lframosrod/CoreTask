@@ -6,9 +6,13 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ApiService {
   private http = inject(HttpClient);
-  
+
   getUsers() {
     return this.http.get('/api/users');
+  }
+
+  createUser(user: any) {
+    return this.http.post('/api/users', user);
   }
 
   getTasksByUser(userId: number) {
