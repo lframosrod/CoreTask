@@ -10,11 +10,12 @@ import { TaskFormComponent } from './task-form';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, JsonPipe, MatCardModule, MatToolbarModule, MatTableModule, TaskFormComponent, MatButtonModule, FormsModule, MatSelectModule, MatInputModule],
+  imports: [RouterOutlet, JsonPipe, MatCardModule, MatToolbarModule, MatTableModule, TaskFormComponent, MatButtonModule, FormsModule, MatSelectModule, MatInputModule, MatMenuModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -32,13 +33,19 @@ export class AppComponent implements OnInit {
 
   pendingTasks = computed(() => {
     return this.backendData()
-      .filter(t => !t.completed)
+      .filter(t => (t.status || (t.completed ? 'COMPLETADA' : 'PENDIENTE')) === 'PENDIENTE')
+      .sort((a, b) => b.priority - a.priority || a.id - b.id);
+  });
+
+  inProgressTasks = computed(() => {
+    return this.backendData()
+      .filter(t => t.status === 'EN_PROCESO')
       .sort((a, b) => b.priority - a.priority || a.id - b.id);
   });
 
   completedTasks = computed(() => {
     return this.backendData()
-      .filter(t => t.completed)
+      .filter(t => (t.status || (t.completed ? 'COMPLETADA' : 'PENDIENTE')) === 'COMPLETADA')
       .sort((a, b) => b.priority - a.priority || a.id - b.id);
   });
 
@@ -119,13 +126,12 @@ export class AppComponent implements OnInit {
     }
   }
 
-  // Función para el clic del botón
-  toggleTask(task: any) {
-    const updatedTask = { ...task, completed: !task.completed };
-
+  // Función para menú desplegable
+  changeTaskStatus(task: any, newStatus: string) {
+    const updatedTask = { ...task, status: newStatus };
     this.apiService.updateTask(task.id, updatedTask).subscribe({
       next: () => this.loadTasks(),
-      error: (err) => console.error('Error al actualizar:', err)
+      error: (err) => console.error('Error al actualizar estado:', err)
     });
   }
 

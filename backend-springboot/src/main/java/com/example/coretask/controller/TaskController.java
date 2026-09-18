@@ -39,8 +39,16 @@ public class TaskController {
     @PutMapping("/{id}")
     public Task updateTask(@PathVariable Long id, @RequestBody Task taskDetails) {
         return taskRepository.findById(id).map(task -> {
-            // Actualizamos únicamente el estado de completado
-            task.setCompleted(taskDetails.isCompleted());
+            task.setTitle(taskDetails.getTitle());
+            task.setDescription(taskDetails.getDescription());
+            task.setPriority(taskDetails.getPriority());
+
+            // Actualizamos el nuevo estado
+            task.setStatus(taskDetails.getStatus());
+
+            // Variable 'completed' sincronizada
+            task.setCompleted("COMPLETADA".equals(taskDetails.getStatus()));
+
             return taskRepository.save(task);
         }).orElseThrow(() -> new RuntimeException("Tarea no encontrada"));
     }
