@@ -2,25 +2,30 @@
   <mat-card-header>
     <mat-card-title>Nueva Tarea</mat-card-title>
   </mat-card-header>
-  
+
   <mat-card-content style="margin-top: 15px;">
     <!-- Formulario que ejecuta submitTask() al presionar Enter o el botón -->
-    <form (ngSubmit)="submitTask()" style="display: flex; gap: 15px; align-items: center;">
-      
-      <mat-form-field appearance="outline" style="flex: 1;">
+    <form (ngSubmit)="submitTask()"
+      style="display: flex; gap: 15px; align-items: center; width: 100%; flex-wrap: wrap;">
+
+      <mat-form-field appearance="outline" style="flex: 2; min-width: 200px;">
         <mat-label>Título de la tarea</mat-label>
         <input matInput name="title" [(ngModel)]="newTask.title" required>
       </mat-form-field>
 
-      <mat-form-field appearance="outline" style="flex: 2;">
-        <mat-label>Descripción (Opcional)</mat-label>
-        <input matInput name="description" [(ngModel)]="newTask.description">
+      <mat-form-field appearance="outline" style="flex: 1; min-width: 120px;">
+        <mat-label>Prioridad</mat-label>
+        <mat-select name="priority" [(ngModel)]="newTask.priority">
+          <mat-option [value]="3">🔴 Alta</mat-option>
+          <mat-option [value]="2">🟡 Media</mat-option>
+          <mat-option [value]="1">🟢 Baja</mat-option>
+        </mat-select>
       </mat-form-field>
 
-      <button mat-flat-button color="primary" type="submit" [disabled]="!newTask.title" style="padding: 25px 20px;">
+      <button mat-flat-button color="primary" type="submit" [disabled]="!newTask.title"
+        style="height: 56px; margin-bottom: 22px;">
         Guardar
       </button>
-
     </form>
   </mat-card-content>
 </mat-card>
