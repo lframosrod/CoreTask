@@ -15,6 +15,14 @@ export class ApiService {
     return this.http.post('/api/users', user);
   }
 
+  updateUser(id: number, user: any) {
+    return this.http.put(`/api/users/${id}`, user);
+  }
+
+  deleteUser(id: number) {
+    return this.http.delete(`/api/users/${id}`);
+  }
+
   getTasksByUser(userId: number) {
     return this.http.get(`/api/tasks/user/${userId}`);
   }

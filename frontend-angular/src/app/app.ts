@@ -27,6 +27,8 @@ export class AppComponent implements OnInit {
   usersList = signal<any[]>([]);
   selectedUserId = signal<number>(0);
   newUsername = '';
+  editingUser = signal<boolean>(false);
+  editUsername = '';
 
   pendingTasks = computed(() => {
     return this.backendData()
@@ -84,6 +86,37 @@ export class AppComponent implements OnInit {
       },
       error: (err) => console.error('Error al crear usuario:', err)
     });
+  }
+
+  startEditUser() {
+    const user = this.usersList().find(u => u.id === this.selectedUserId());
+    if (user) {
+      this.editUsername = user.username;
+      this.editingUser.set(true); // Cambiamos la interfaz a modo edición
+    }
+  }
+
+  saveEditUser() {
+    if (!this.editUsername) return;
+    this.apiService.updateUser(this.selectedUserId(), { username: this.editUsername }).subscribe({
+      next: () => {
+        this.editingUser.set(false);
+        this.loadUsers(); // Recarga la lista para mostrar el nuevo nombre
+      },
+      error: (err) => console.error('Error al editar usuario:', err)
+    });
+  }
+
+  deleteCurrentUser() {
+    if (confirm('🚨 ¿Estás seguro de eliminar este perfil? Se borrarán TODAS sus tareas permanentemente.')) {
+      this.apiService.deleteUser(this.selectedUserId()).subscribe({
+        next: () => {
+          this.selectedUserId.set(0); // Reiniciamos la selección
+          this.loadUsers(); // Recarga la lista
+        },
+        error: (err) => console.error('Error al eliminar usuario:', err)
+      });
+    }
   }
 
   // Función para el clic del botón

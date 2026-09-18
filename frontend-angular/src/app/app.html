@@ -8,15 +8,38 @@
   <mat-card style="margin-bottom: 20px; background-color: #f8fcfd;">
     <mat-card-content style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
 
-      <mat-form-field appearance="outline" style="flex: 1; min-width: 200px;">
-        <mat-label>Usuario Activo</mat-label>
-        <mat-select [ngModel]="selectedUserId()" (ngModelChange)="onUserChange($event)">
-          @for (user of usersList(); track user.id) {
-          <mat-option [value]="user.id">{{ user.username }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
+      <!-- SECCIÓN 1: USUARIO ACTIVO (Inteligente: Selector o Edición) -->
+      <div style="display: flex; gap: 10px; align-items: center; flex: 2; min-width: 300px;">
+        @if (!editingUser()) {
+        <mat-form-field appearance="outline" style="flex: 1; margin-bottom: -1.25em;">
+          <mat-label>Usuario Activo</mat-label>
+          <mat-select [ngModel]="selectedUserId()" (ngModelChange)="onUserChange($event)">
+            @for (user of usersList(); track user.id) {
+            <mat-option [value]="user.id">{{ user.username }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
 
+        <button mat-button color="primary" (click)="startEditUser()" [disabled]="selectedUserId() === 0"
+          style="min-width: auto; padding: 0 10px;">
+          ✏️ Editar
+        </button>
+        <button mat-button color="warn" (click)="deleteCurrentUser()" [disabled]="selectedUserId() === 0"
+          style="min-width: auto; padding: 0 10px;">
+          🗑️ Borrar
+        </button>
+        }
+        @else {
+        <mat-form-field appearance="outline" style="flex: 1; margin-bottom: -1.25em;">
+          <mat-label>Nuevo nombre</mat-label>
+          <input matInput [(ngModel)]="editUsername">
+        </mat-form-field>
+        <button mat-flat-button color="primary" (click)="saveEditUser()" style="margin-bottom: 22px;">Guardar</button>
+        <button mat-button (click)="editingUser.set(false)" style="margin-bottom: 22px;">Cancelar</button>
+        }
+      </div>
+
+      <!-- SECCIÓN 2: CREAR PERFIL NUEVO (Intacto) -->
       <div style="display: flex; gap: 10px; flex: 1; min-width: 250px;">
         <mat-form-field appearance="outline" style="flex: 1;">
           <mat-label>Crear perfil nuevo</mat-label>
@@ -36,9 +59,6 @@
 
   <!-- Contenedor principal para todo -->
   <div style="padding: 20px; max-width: 800px; margin: 0 auto;">
-
-    <!-- Formulario modular para crear tareas -->
-    <app-task-form (taskCreated)="loadTasks()"></app-task-form>
 
     <!-- Contenedor dividido en 2 -->
     <div style="display: flex; gap: 20px; flex-wrap: wrap;">
