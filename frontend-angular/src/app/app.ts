@@ -87,8 +87,12 @@ export class AppComponent implements OnInit {
   createNewUser() {
     if (!this.newUsername) return;
     this.apiService.createUser({ username: this.newUsername, email: this.newUsername + '@test.com' }).subscribe({
-      next: () => {
+      // Capturar el usuario
+      next: (createdUser: any) => {
         this.newUsername = '';
+        // Establecer como usuario activo
+        this.selectedUserId.set(createdUser.id);
+        // Recargar la lista
         this.loadUsers();
       },
       error: (err) => console.error('Error al crear usuario:', err)
